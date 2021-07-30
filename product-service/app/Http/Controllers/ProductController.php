@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Jobs\ProductDeleted;
 
 class ProductController extends Controller
 {
@@ -60,6 +61,10 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->delete();
+
+        ProductDeleted::dispatch([
+            'id' => $product->id
+        ]);
 
         return response(null);
     }
